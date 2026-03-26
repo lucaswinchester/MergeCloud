@@ -2,7 +2,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { organizationSettings } from "@/db/schema";
-import { eq } from "drizzle-orm";
+
 
 async function verifySuperAdmin() {
   const { userId } = await auth();

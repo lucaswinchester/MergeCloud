@@ -35,7 +35,7 @@ interface ResellerCredential {
   platformUserId: string | null;
   platformEmail: string | null;
   syncStatus: string | null;
-  metadata: any;
+  metadata: Record<string, unknown> | null;
   lastSyncedAt: string | null;
   createdAt: string | null;
   // Enriched from Clerk

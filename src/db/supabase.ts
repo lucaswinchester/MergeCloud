@@ -35,7 +35,7 @@ export function createServerClient() {
 // Subscribe to real-time device status changes
 export function subscribeToDeviceStatus(
   organizationId: string,
-  callback: (payload: any) => void
+  callback: (payload: Record<string, unknown>) => void
 ) {
   const channel = supabase
     .channel(`devices:${organizationId}`)
@@ -59,7 +59,7 @@ export function subscribeToDeviceStatus(
 // Subscribe to new alerts
 export function subscribeToAlerts(
   organizationId: string,
-  callback: (payload: any) => void
+  callback: (payload: Record<string, unknown>) => void
 ) {
   const channel = supabase
     .channel(`alerts:${organizationId}`)

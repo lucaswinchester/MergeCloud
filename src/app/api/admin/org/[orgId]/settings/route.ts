@@ -118,7 +118,7 @@ export async function PUT(
     await db.insert(organizationSettings).values({
       clerkOrgId: orgId,
       ...updateData,
-    } as any);
+    } as typeof organizationSettings.$inferInsert);
   }
 
   return NextResponse.json({ success: true });

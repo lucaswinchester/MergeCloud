@@ -6,10 +6,7 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import {
-    Tabs,
     TabsContent,
-    TabsList,
-    TabsTrigger,
   } from "@/components/ui/tabs"
 import { Overview } from "@/components/charts/overview"
 import { RecentSales } from "@/components/charts/recent-sales"
@@ -149,7 +146,7 @@ export function Wholesale() {
                 <CardHeader>
                 <CardTitle>Recent Invoices</CardTitle>
                 <CardDescription>
-                    You've place 16 orders in the last 12 months
+                    You&apos;ve place 16 orders in the last 12 months
                 </CardDescription>
                 </CardHeader>
                 <CardContent>

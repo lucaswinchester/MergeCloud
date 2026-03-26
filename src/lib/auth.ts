@@ -25,8 +25,8 @@ export interface OrgAuthContext {
  */
 export function withOrgAuth(
   handler: (ctx: OrgAuthContext, req: NextRequest) => Promise<NextResponse>
-): (req: NextRequest, routeCtx?: any) => Promise<NextResponse> {
-  return async (req: NextRequest, routeCtx?: any) => {
+): (req: NextRequest) => Promise<NextResponse> {
+  return async (req: NextRequest) => {
     try {
       const { userId, orgId } = await auth();
 
@@ -97,8 +97,8 @@ export interface PlatformAuthContext extends OrgAuthContext {
 export function withPlatformAuth(
   platform: string,
   handler: (ctx: PlatformAuthContext, req: NextRequest) => Promise<NextResponse>
-): (req: NextRequest, routeCtx?: any) => Promise<NextResponse> {
-  return async (req: NextRequest, routeCtx?: any) => {
+): (req: NextRequest) => Promise<NextResponse> {
+  return async (req: NextRequest) => {
     try {
       const { userId, orgId, orgRole } = await auth();
 

@@ -111,7 +111,7 @@ export async function PUT(
       .set(values)
       .where(eq(userApiCredentials.id, existing.id));
   } else {
-    await db.insert(userApiCredentials).values(values as any);
+    await db.insert(userApiCredentials).values(values as typeof userApiCredentials.$inferInsert);
   }
 
   return NextResponse.json({ success: true });

@@ -58,15 +58,20 @@ export default function AgentsPage() {
 
       const json = await response.json();
 
-      const transformedData = json.members.map((member: any) => ({
-        id: member.id,
-        name: `${member.publicUserData.firstName || ""} ${member.publicUserData.lastName || ""}`.trim() || "Unknown",
-        email: member.publicUserData.identifier,
-        role: member.role.replace("org:", ""),
-        permissions: member.permissions?.join(", ") || "",
-        organizationName: member.organization?.name || "",
-        imageUrl: member.publicUserData.imageUrl,
-      }));
+      const transformedData = json.members.map((member: Record<string, unknown>) => {
+        const publicUserData = member.publicUserData as Record<string, unknown> | undefined;
+        const organization = member.organization as Record<string, unknown> | undefined;
+        const permissions = member.permissions as string[] | undefined;
+        return {
+          id: member.id as string,
+          name: `${(publicUserData?.firstName as string) || ""} ${(publicUserData?.lastName as string) || ""}`.trim() || "Unknown",
+          email: publicUserData?.identifier as string,
+          role: (member.role as string).replace("org:", ""),
+          permissions: permissions?.join(", ") || "",
+          organizationName: (organization?.name as string) || "",
+          imageUrl: publicUserData?.imageUrl as string,
+        };
+      });
 
       setData([...transformedData]);
       setError(null);
@@ -151,7 +156,7 @@ export default function AgentsPage() {
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Team Members</h1>
               <p className="text-muted-foreground">
-                Manage your organization's team members and their roles.
+                Manage your organization&apos;s team members and their roles.
               </p>
             </div>
             <div className="flex items-center gap-2">

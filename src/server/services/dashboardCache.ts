@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { getDb, isDatabaseConfigured, dashboardStats, type DashboardStat } from "@/db/client";
+import { getDb, isDatabaseConfigured, dashboardStats } from "@/db/client";
 import { fetchAllDevices } from "@/server/iqapi";
 
 interface Device {

@@ -1,14 +1,9 @@
 import axios from 'axios';
-import dotenv from "dotenv"
 
-const API_URL = "https://accounts.zoho.com/oauth/v2/auth?";
-
-const refreshToken = process.env.ZOHO_REFRESH_TOKEN;
-const orgId = process.env.ZOHO_ORG_ID;
 const clientId = process.env.ZOHO_CLIENT_ID;
 const clientSecret = process.env.ZOHO_CLIENT_SECRET;
 
-async function getTokens(grantToken: string) {
+export async function getTokens(grantToken: string) {
     const params = new URLSearchParams();
     params.append('code', grantToken);
     params.append('client_id', clientId as string);
@@ -23,17 +18,19 @@ async function getTokens(grantToken: string) {
         console.log('Access Token:', access_token);
         console.log('Refresh Token:', refresh_token);
 
-        // You may want to securely store the refresh token for future use
-    } catch (error: any) {
-        console.error('Error fetching tokens:', error.response?.data || error.message);
+    } catch (error: unknown) {
+        const err = error as Record<string, unknown>;
+        const errResponse = err.response as Record<string, unknown> | undefined;
+        const errMessage = err.message as string | undefined;
+        console.error('Error fetching tokens:', errResponse?.data || errMessage);
     }
 }
 
-/** 
+/**
  * Refresh an expired access token using the refresh token.
  */
-async function refreshAccessToken() {
-    const REFRESH_TOKEN = process.env.ZOHO_REFRESH_TOKEN; // Ensure you store this securely
+export async function refreshAccessToken() {
+    const REFRESH_TOKEN = process.env.ZOHO_REFRESH_TOKEN;
 
     if (!REFRESH_TOKEN) {
         console.error("Missing refresh token. Store it securely in the .env file.");
@@ -51,8 +48,10 @@ async function refreshAccessToken() {
         const { access_token } = response.data;
 
         console.log('New Access Token:', access_token);
-        // Update the stored access token securely (e.g., in a database)
-    } catch (error: any) {
-        console.error('Error refreshing access token:', error.response?.data || error.message);
+    } catch (error: unknown) {
+        const err = error as Record<string, unknown>;
+        const errResponse = err.response as Record<string, unknown> | undefined;
+        const errMessage = err.message as string | undefined;
+        console.error('Error refreshing access token:', errResponse?.data || errMessage);
     }
 }

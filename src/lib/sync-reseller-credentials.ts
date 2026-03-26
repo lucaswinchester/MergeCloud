@@ -41,10 +41,10 @@ const defaultProvider: SparqfiResellerProvider = {
     const data = await res.json();
     // Normalise whatever shape the API returns
     const list: unknown[] = Array.isArray(data) ? data : data?.data ?? data?.resellers ?? [];
-    return list.map((r: any) => ({
-      uuid: r.uuid ?? r.id,
-      email: (r.email ?? "").toLowerCase().trim(),
-      name: r.name ?? r.label ?? undefined,
+    return list.map((r: Record<string, unknown>) => ({
+      uuid: (r.uuid ?? r.id) as string,
+      email: ((r.email ?? "") as string).toLowerCase().trim(),
+      name: (r.name ?? r.label ?? undefined) as string | undefined,
     }));
   },
 

@@ -10,7 +10,7 @@ const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
 interface WebhookEvent {
   type: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 async function verifyWebhook(req: NextRequest): Promise<WebhookEvent | null> {

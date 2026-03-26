@@ -155,10 +155,10 @@ export async function fetchNotes(deviceId?: string, apiKey?: string): Promise<Sl
       throw new Error('Invalid notes data format received from server');
     }
 
-    const slim: SlimNote[] = data.map((n: any) => ({
-      notes: n?.notes ?? "",
-      user_full_name: n?.user?.full_name ?? "",
-      created_at: n?.created_at ?? ""
+    const slim: SlimNote[] = data.map((n: Record<string, unknown>) => ({
+      notes: (n?.notes as string) ?? "",
+      user_full_name: ((n?.user as Record<string, unknown>)?.full_name as string) ?? "",
+      created_at: (n?.created_at as string) ?? ""
     }));
 
     return slim;
@@ -202,10 +202,10 @@ export async function fetchNoteById(noteId: string, apiKey?: string) {
 
 export async function fetchDevices(page: number, size: number, q: string = "", apiKey?: string) {
   try {
-    const params: Record<string, any> = { size };
+    const params: Record<string, string> = { size: String(size) };
 
     if (!q) {
-      params.page = page;
+      params.page = String(page);
     } else {
       params.q = q;
     }
@@ -409,7 +409,7 @@ export async function fetchDevicePlans(apiKey?: string): Promise<DevicePlan[]> {
     const data = await response.json();
     const arr = Array.isArray(data) ? data : [];
     return arr
-      .map((p: any) => ({
+      .map((p: Record<string, unknown>) => ({
         plan_uuid: String(p?.plan_uuid ?? p?.uuid ?? ""),
         name: String(p?.name ?? ""),
       }))
@@ -457,7 +457,7 @@ export async function updateDevicePlan(deviceUuid: string, planUuid: string, api
 }
 
 // Device control actions
-export async function restartDevice(deviceUuid: string, apiKey?: string): Promise<any> {
+export async function restartDevice(deviceUuid: string, apiKey?: string): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/restart`
@@ -493,7 +493,7 @@ export async function restartDevice(deviceUuid: string, apiKey?: string): Promis
   }
 }
 
-export async function triggerSpeedTest(deviceUuid: string, testType: 1 | 2 = 1, apiKey?: string): Promise<any> {
+export async function triggerSpeedTest(deviceUuid: string, testType: 1 | 2 = 1, apiKey?: string): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/speed-test?speed_test_type=${testType}`
@@ -529,7 +529,7 @@ export async function triggerSpeedTest(deviceUuid: string, testType: 1 | 2 = 1, 
   }
 }
 
-export async function triggerNetworkScan(deviceUuid: string, apiKey?: string): Promise<any> {
+export async function triggerNetworkScan(deviceUuid: string, apiKey?: string): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/net-scan`
@@ -575,7 +575,7 @@ export async function scheduleDeviceRestart(
   deviceUuid: string,
   schedule: ScheduleRestartRequest,
   apiKey?: string
-): Promise<any> {
+): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/schedule-restart`
@@ -614,7 +614,7 @@ export async function scheduleDeviceRestart(
 }
 
 // Install uptime-restart script on device
-export async function installUptimeRestart(deviceUuid: string, apiKey?: string): Promise<any> {
+export async function installUptimeRestart(deviceUuid: string, apiKey?: string): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/install-uptime-restart`
@@ -660,7 +660,7 @@ export async function updateDeviceSSID(
   deviceUuid: string,
   ssidConfig: UpdateSSIDRequest,
   apiKey?: string
-): Promise<any> {
+): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/update-ssid`
@@ -699,7 +699,7 @@ export async function updateDeviceSSID(
 }
 
 // Reset device configuration
-export async function resetDeviceConfig(deviceUuid: string, apiKey?: string): Promise<any> {
+export async function resetDeviceConfig(deviceUuid: string, apiKey?: string): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/reset-config`
@@ -744,7 +744,7 @@ export async function updateDeviceMTU(
   deviceUuid: string,
   mtuConfig: UpdateMTURequest,
   apiKey?: string
-): Promise<any> {
+): Promise<unknown> {
   const isBrowser = typeof window !== "undefined";
   const url = isBrowser
     ? `/api/iq/device/${encodeURIComponent(deviceUuid)}/update-mtu`

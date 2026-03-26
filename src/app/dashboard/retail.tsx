@@ -6,10 +6,7 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import {
-    Tabs,
     TabsContent,
-    TabsList,
-    TabsTrigger,
   } from "@/components/ui/tabs"
 import { Overview } from "@/components/charts/overview"
 import { RecentSales } from "@/components/charts/recent-sales"

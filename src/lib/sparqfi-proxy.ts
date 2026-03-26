@@ -178,7 +178,7 @@ export function createSparqfiProxy(options: ProxyOptions) {
     if (options.authMode === "platform") {
       const handler = withPlatformAuth(
         "sparqfi",
-        async (ctx: PlatformAuthContext, _req: NextRequest) => proxyHandler(ctx)
+        async (ctx: PlatformAuthContext) => proxyHandler(ctx)
       );
       return handler(req, routeCtx);
     }

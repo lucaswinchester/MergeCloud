@@ -1,11 +1,6 @@
 "use client"
 
-import Link from 'next/link';
-import { Button } from "@/components/ui/button"
 import {
-  UserButton,
-  SignedIn,
-  SignedOut,
   useAuth
 } from "@clerk/nextjs"
 import { useRouter } from "next/navigation";

@@ -1,23 +1,11 @@
 "use client";
 
-import { FC, SVGProps, ReactNode } from "react"
-import Image from "next/image"
-import Link from 'next/link';
-import {
-  UserButton,
-  SignedIn,
-  SignedOut,
-  useAuth
-} from "@clerk/nextjs"
-import { useRouter } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -25,41 +13,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DollarSignIcon, RadioTowerIcon, RefreshCwOffIcon, Users2Icon } from "lucide-react";
 import { DataTableDemo } from "@/app/devices/table"
 
-
-type CardData = {
-  title: string;
-  description: string;
-  value: ReactNode;
-  icon: FC<SVGProps<SVGSVGElement>>;
-};
-
 export default function Page() {
-  const cards: CardData[] = [
-    { title: "Active Services", description: "Running Total", value: "1,524", icon: RadioTowerIcon },
-    { title: "Sales", description: "Month to Date", value: "84", icon: Users2Icon },
-    { title: "Disconnects", description: "Month to Date", value: "19", icon: RefreshCwOffIcon },
-    { title: "Commissions", description: "Estimate Subject to Change", value: "$481.43", icon: DollarSignIcon },
-  ];
-
   return (
     <SidebarProvider>
       <AppSidebar />

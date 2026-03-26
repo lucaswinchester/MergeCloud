@@ -1,18 +1,11 @@
 "use client";
 
-import { FC, SVGProps, ReactNode } from "react";
-import Image from "next/image";
-import Link from 'next/link';
-import { ClerkProvider, UserButton, SignedIn, SignedOut, useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -21,7 +14,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { DollarSignIcon, RadioTowerIcon, RefreshCwOffIcon, Users2Icon } from "lucide-react";
 import dynamic from 'next/dynamic';
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
@@ -39,21 +31,7 @@ const DataTableDemo = dynamic(
 );
 
 
-type CardData = {
-  title: string;
-  description: string;
-  value: ReactNode;
-  icon: FC<SVGProps<SVGSVGElement>>;
-};
-
 export default function Page() {
-  const cards = [
-    { title: "Active Services", description: "Running Total", value: "1,524", icon: RadioTowerIcon },
-    { title: "Sales", description: "Month to Date", value: "84", icon: Users2Icon },
-    { title: "Disconnects", description: "Month to Date", value: "19", icon: RefreshCwOffIcon },
-    { title: "Commissions", description: "Estimate Subject to Change", value: "$481.43", icon: DollarSignIcon },
-  ];
-
   return (
     <ErrorBoundary 
       fallback={

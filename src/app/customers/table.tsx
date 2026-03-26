@@ -13,7 +13,7 @@ import {
   useReactTable,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { ChevronDown, ChevronLeft, ChevronRight, CircleCheck, CircleXIcon, Columns2, Pencil, Wifi, WifiOff } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleCheck, CircleXIcon, Columns2, Pencil, Wifi, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,10 +37,7 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import {
     Select,
     SelectContent,
@@ -75,13 +72,7 @@ export function DataTableDemo() {
   const [pageIndex, setPageIndex] = useState(0); // Current page index
   const [pageSize, setPageSize] = useState(100); // Page size
 
-  const [selectedDevice, setSelectedDevice] = useState<Devices | null>(null);
-  const [newLabel, setNewLabel] = useState<string>("");
-
-  // Handle clicking the pencil icon
-  const handleEditLabel = (device: Devices) => {
-    setSelectedDevice(device);
-    setNewLabel(device.label); // Prefill input with the current label
+  const handleEditLabel = () => {
   };
 
   const columns: ColumnDef<Devices>[] = [

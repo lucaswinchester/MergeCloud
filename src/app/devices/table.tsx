@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, ChevronLeft, ChevronRight, CircleCheck, CircleXIcon, Columns2, Pencil, Wifi, WifiOff, Filter, Download, MoreHorizontal, RotateCcw, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleCheck, CircleXIcon, Columns2, Pencil, Wifi, WifiOff, Filter, Download, MoreHorizontal, RotateCcw, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,16 +46,12 @@ import {
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import {
     Select,
     SelectContent,
@@ -65,7 +61,73 @@ import {
   } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Label } from "@/components/ui/label"
-import { PopoverClose } from "@radix-ui/react-popover";
+
+function LabelCell({ row }: { row: { getValue: (key: string) => string; original: Devices } }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [label, setLabel] = useState<string>(row.getValue("label"));
+  const [uuid] = useState<string>(row.getValue("uuid"));
+  const [open, setOpen] = useState(false);
+
+  const handleUpdate = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await updateLabel(uuid, label);
+
+      const result = await response;
+      console.log("Update successful:", result.label);
+
+      setLabel(result.label);
+      setOpen(false);
+
+    } catch (err) {
+      setError("Error updating label");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex gap-4">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger className="ml-2 text-gray-500 hover:text-primary">
+          <Pencil size={16} />
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium leading-none">Label</h4>
+              <p className="text-sm text-muted-foreground">
+                Set a label for this device.
+              </p>
+            </div>
+            <div className="grid gap-2">
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="label">Label</Label>
+                <Input
+                  id="label"
+                  value={label}
+                  onChange={(e) => setLabel(e.target.value)}
+                  className="col-span-2 h-8"
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Button onClick={handleUpdate} disabled={loading}>
+                  {loading ? "Updating..." : "Update"}
+                </Button>
+              </div>
+              {error && <p className="text-destructive">{error}</p>}
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+      <span>{label}</span>
+    </div>
+  );
+}
 
 export type Devices = {
   uuid: string;
@@ -142,8 +204,6 @@ export function DataTableDemo() {
     });
   }, [devices, activationFilter, statusFilter, deviceTypeFilter, devicePlanFilter]);
 
-  const [selectedDevice, setSelectedDevice] = useState<Devices | null>(null);
-  const [newLabel, setNewLabel] = useState<string>("");
 
   // Get selected devices
   const selectedDevices = React.useMemo(() => {
@@ -263,72 +323,7 @@ export function DataTableDemo() {
     {
       accessorKey: "label",
       header: "Label",
-      cell: ({ row }) => {
-        const [loading, setLoading] = useState(false);
-        const [error, setError] = useState<string | null>(null);
-        const [label, setLabel] = useState<string>(row.getValue("label"));
-        const [uuid, setID] = useState<string>(row.getValue("uuid"));
-        const [open, setOpen] = useState(false);
-    
-        const handleUpdate = async () => {
-          setLoading(true);
-          setError(null);
-    
-          try {
-            const response = await updateLabel(uuid, label);
-        
-            const result = await response;
-            console.log("Update successful:", result.label);
-
-            setLabel(result.label);
-            setOpen(false);
-            
-          } catch (err) {
-            setError("Error updating label");
-            console.error(err);
-          } finally {
-            setLoading(false);
-          }
-        };
-    
-        return (
-          <div className="flex gap-4">
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger className="ml-2 text-gray-500 hover:text-primary">
-                <Pencil size={16} />
-              </PopoverTrigger>
-              <PopoverContent>
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium leading-none">Label</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Set a label for this device.
-                    </p>
-                  </div>
-                  <div className="grid gap-2">
-                    <div className="grid grid-cols-3 items-center gap-4">
-                      <Label htmlFor="label">Label</Label>
-                      <Input
-                        id="label"
-                        value={label}
-                        onChange={(e) => setLabel(e.target.value)}
-                        className="col-span-2 h-8"
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 items-center gap-4">
-                      <Button onClick={handleUpdate} disabled={loading}>
-                        {loading ? "Updating..." : "Update"}
-                      </Button>
-                    </div>
-                    {error && <p className="text-destructive">{error}</p>}
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-            <span>{label}</span>
-          </div>
-        );
-      },
+      cell: ({ row }) => <LabelCell row={{ getValue: (key: string) => row.getValue(key), original: row.original }} />,
     },
     
     {
@@ -447,6 +442,14 @@ export function DataTableDemo() {
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredDevices.length / pageSize));
+
+  useEffect(() => {
+    if (totalPages > 0 && pageIndex >= totalPages) {
+      setPageIndex(Math.max(0, totalPages - 1));
+    }
+  }, [totalPages, pageIndex]);
+
   if (error) {
     return (
       <div className="p-4 border border-red-200 bg-red-50 rounded-md">
@@ -475,16 +478,6 @@ export function DataTableDemo() {
       </div>
     );
   }
-
-  // Calculate the total number of pages based on filtered data
-  const totalPages = Math.max(1, Math.ceil(filteredDevices.length / pageSize));
-  
-  // Ensure pageIndex is within bounds
-  useEffect(() => {
-    if (totalPages > 0 && pageIndex >= totalPages) {
-      setPageIndex(Math.max(0, totalPages - 1));
-    }
-  }, [totalPages, pageIndex]);
 
   // Calculate page numbers to show
   const pagesToShow = [];

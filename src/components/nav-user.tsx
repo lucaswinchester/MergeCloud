@@ -1,13 +1,8 @@
 "use client";
 
-import * as React from "react"
-
 import {
   BadgeCheck,
-  Bell,
-  Building,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
   Moon,
   Sun,
@@ -24,7 +19,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -36,19 +30,9 @@ import {
 } from "@/components/ui/sidebar";
 
 import {
-  ClerkProvider,
-  OrganizationProfile,
-  SignedIn,
-  SignInButton,
-  SignedOut,
-  SignOutButton,
-  UserButton,
   useClerk,
   useUser,
 } from "@clerk/nextjs";
-import {
-  dark
-} from "@clerk/themes"
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -66,10 +50,6 @@ export function NavUser() {
     }
   }, [theme]);
 
-  const appearance = React.useMemo(() => {
-    return theme === "dark" ? dark : undefined;
-  }, [theme]);
-
   const handleClick = () => {
     // Toggle theme
     const newTheme = theme === "light" ? "dark" : "light";
@@ -84,7 +64,7 @@ export function NavUser() {
     setText(newText);
   };
 
-  const { isSignedIn, user, isLoaded } = useUser(); // Get user information
+  const { user } = useUser(); // Get user information
   const { signOut, openUserProfile } = useClerk(); // Access Clerk actions
 
   const handleSignOut = async () => {
