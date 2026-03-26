@@ -114,7 +114,7 @@ export function DataTableDemo() {
           <div className="flex items-center justify-between">
             <span>{row.getValue("label")}</span>
             <button
-              onClick={() => handleEditLabel(row.original)}
+              onClick={() => handleEditLabel()}
               className="ml-2 text-gray-500 hover:text-primary"
             >
               <Pencil size={16} />

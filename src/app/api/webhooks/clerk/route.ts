@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
   }
 
   if (event.type === "organizationMembership.created") {
-    const { organization, public_user_data } = event.data;
+    const organization = event.data.organization as Record<string, unknown> | undefined;
+    const public_user_data = event.data.public_user_data as Record<string, unknown> | undefined;
     const orgId = organization?.id as string | undefined;
     const userId = public_user_data?.user_id as string | undefined;
     const userEmail = public_user_data?.identifier as string | undefined;

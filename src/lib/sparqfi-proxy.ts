@@ -57,7 +57,7 @@ interface ProxyOptions {
 export function createSparqfiProxy(options: ProxyOptions) {
   return async (
     req: NextRequest,
-    routeCtx?: { params: Promise<Record<string, string>> }
+    routeCtx: { params: Promise<Record<string, string>> }
   ) => {
     const incomingMethod = (req.method as ProxyMethod) || "GET";
 
@@ -180,13 +180,13 @@ export function createSparqfiProxy(options: ProxyOptions) {
         "sparqfi",
         async (ctx: PlatformAuthContext) => proxyHandler(ctx)
       );
-      return handler(req, routeCtx);
+      return handler(req);
     }
 
     // Default: org-level auth (existing behavior)
     const handler = withOrgAuth(
       async (ctx: OrgAuthContext) => proxyHandler(ctx)
     );
-    return handler(req, routeCtx);
+    return handler(req);
   };
 }
