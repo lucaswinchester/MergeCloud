@@ -14,6 +14,21 @@ import {
 import { Overview } from "@/components/charts/overview"
 import { RecentSales } from "@/components/charts/recent-sales"
 
+// Placeholder data for wholesale overview
+const wholesaleData = [
+  { name: "Jan", total: 4500 },
+  { name: "Feb", total: 5200 },
+  { name: "Mar", total: 6100 },
+  { name: "Apr", total: 5800 },
+  { name: "May", total: 7200 },
+  { name: "Jun", total: 8100 },
+  { name: "Jul", total: 7600 },
+  { name: "Aug", total: 8500 },
+  { name: "Sep", total: 9200 },
+  { name: "Oct", total: 10100 },
+  { name: "Nov", total: 11500 },
+  { name: "Dec", total: 12800 },
+];
 
 export function Wholesale() {
     return(
@@ -127,7 +142,7 @@ export function Wholesale() {
                 <CardTitle>Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
-                <Overview />
+                <Overview data={wholesaleData} />
                 </CardContent>
             </Card>
             <Card className="col-span-3">

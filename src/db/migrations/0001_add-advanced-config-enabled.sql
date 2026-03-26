@@ -1,0 +1,1 @@
+ALTER TABLE "devices" ADD COLUMN "advanced_config_enabled" boolean DEFAULT false;

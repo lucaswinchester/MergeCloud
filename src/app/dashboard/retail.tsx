@@ -14,6 +14,21 @@ import {
 import { Overview } from "@/components/charts/overview"
 import { RecentSales } from "@/components/charts/recent-sales"
 
+// Placeholder data for retail overview
+const retailData = [
+  { name: "Jan", total: 1200 },
+  { name: "Feb", total: 1500 },
+  { name: "Mar", total: 1800 },
+  { name: "Apr", total: 2200 },
+  { name: "May", total: 1900 },
+  { name: "Jun", total: 2400 },
+  { name: "Jul", total: 2100 },
+  { name: "Aug", total: 2600 },
+  { name: "Sep", total: 2300 },
+  { name: "Oct", total: 2800 },
+  { name: "Nov", total: 3100 },
+  { name: "Dec", total: 3500 },
+];
 
 export function Retail() {
     return(
@@ -127,7 +142,7 @@ export function Retail() {
                 <CardTitle>Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
-                <Overview />
+                <Overview data={retailData} />
                 </CardContent>
             </Card>
             <Card className="col-span-3">

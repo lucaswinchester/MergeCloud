@@ -4,20 +4,21 @@ import * as React from "react"
 import {
   Calendar,
   Cloud,
-  Command,
   Contact,
   GraduationCap,
   LayoutDashboardIcon,
   LifeBuoy,
   MapIcon,
   Megaphone,
+  MonitorCog,
   Package2,
   Power,
   Send,
+  Users,
 } from "lucide-react"
 
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useOrgPermissions } from "@/hooks/use-org-permissions";
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
@@ -29,64 +30,21 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 import {
-  ClerkProvider,
-  UserButton,
   OrganizationSwitcher,
-  OrganizationProfile,
   SignedIn,
-  SignedOut,
+  useUser,
 } from "@clerk/nextjs"
 import {
   dark
 } from "@clerk/themes"
 
+import { Shield } from "lucide-react"
+
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboardIcon,
-      isActive: true,
-    },
-    {
-      title: "Agents",
-      url: "/Agents",
-      icon: Contact,
-    },
-    {
-      title: "Order",
-      url: "#",
-      icon: Package2,
-      items: [
-        {
-          title: "Cellular",
-          url: "/order-cellular",
-        },
-        {
-          title: "Satellite",
-          url: "/order-satellite",
-        },
-        {
-          title: "IoT",
-          url: "/order-iot",
-        },
-        {
-          title: "Mobility",
-          url: "/order-mobility",
-        },
-      ],
-    },
-  ],
   navSecondary: [
     {
       title: "Support",
@@ -134,24 +92,44 @@ const data = {
 }
 
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { theme, setTheme } = useTheme();
+export const AppSidebar = React.memo(function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { theme } = useTheme();
+  const appearance = React.useMemo(() => (theme === "dark" ? dark : undefined), [theme]);
+  const { user } = useUser();
+  const isSuperAdmin = user?.publicMetadata?.isSuperAdmin === true;
+  const { permissions } = useOrgPermissions();
 
-  const appearance = React.useMemo(() => {
-    return theme === "dark" ? dark : undefined;
-  }, [theme]);
+  const navItems = React.useMemo(() => {
+    const items: { title: string; url: string; icon: React.ElementType; isActive?: boolean }[] = [
+      { title: "Dashboard", url: "/dashboard", icon: LayoutDashboardIcon, isActive: true },
+      { title: "Agents", url: "/Agents", icon: Contact },
+    ];
+    if (permissions?.isRetailer || permissions?.isWholesaler) {
+      items.push({ title: "Order", url: "/order", icon: Package2 });
+    }
+    if (permissions?.isRetailer) {
+      items.push({ title: "Customers", url: "/customers", icon: Users });
+    }
+    if (permissions?.isWholesaler && permissions?.hasDeviceAccess) {
+      items.push({ title: "Devices", url: "/devices", icon: MonitorCog });
+    }
+    if (isSuperAdmin) {
+      items.push({ title: "Admin", url: "/admin", icon: Shield });
+    }
+    return items;
+  }, [permissions, isSuperAdmin]);
 
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <OrganizationSwitcher hidePersonal appearance={{baseTheme: appearance}}/>
+            <OrganizationSwitcher hidePersonal appearance={{ baseTheme: appearance }} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navItems} />
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
@@ -161,5 +139,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SignedIn>
       </SidebarFooter>
     </Sidebar>
-  )
-}
+  );
+});
+
