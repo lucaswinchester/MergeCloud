@@ -101,7 +101,7 @@ interface PortGroup {
 export default function DevicePage({ params }: { params: Promise<{ uuid: string }> }) {
   const { uuid } = use(params);
   const { permissions } = useOrgPermissions();
-  const sparqfiPermissions = permissions?.sparqfi ?? {};
+  const sparqfiPermissions = permissions?.sparqfiPermissions ?? {};
 
   const deviceData = useMemo(() => ({ uuid }), [uuid]);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -695,9 +695,9 @@ export default function DevicePage({ params }: { params: Promise<{ uuid: string 
                     if (Array.isArray(notesData)) {
                       const formatted = notesData.map((n: Record<string, unknown>) => ({
                         id: String(n.id || ""),
-                        notes: n.notes || "",
-                        user_full_name: n.user_full_name || "Unknown",
-                        created_at: n.created_at || new Date().toISOString(),
+                        notes: String(n.notes || ""),
+                        user_full_name: String(n.user_full_name || "Unknown"),
+                        created_at: String(n.created_at || new Date().toISOString()),
                       }));
                       setNotes(formatted);
                     }

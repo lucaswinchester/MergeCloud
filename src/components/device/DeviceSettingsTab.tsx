@@ -562,9 +562,9 @@ export function DeviceSettingsTab({ device, uuid, actionLoading, setActionLoadin
             </TableHeader>
             <TableBody>
               {backups.map((b, i) => (
-                <TableRow key={b.id ?? i}>
-                  <TableCell>{b.name || `Backup ${i + 1}`}</TableCell>
-                  <TableCell>{b.created_at ? new Date(b.created_at).toLocaleString() : "N/A"}</TableCell>
+                <TableRow key={(b.id as string) ?? i}>
+                  <TableCell>{(b.name as string) || `Backup ${i + 1}`}</TableCell>
+                  <TableCell>{b.created_at ? new Date(b.created_at as string).toLocaleString() : "N/A"}</TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm" className="h-7 text-xs">
                       Restore

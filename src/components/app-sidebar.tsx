@@ -15,6 +15,7 @@ import {
   Power,
   Send,
   Users,
+  type LucideIcon,
 } from "lucide-react"
 
 import { useTheme } from "next-themes";
@@ -100,7 +101,7 @@ export const AppSidebar = React.memo(function AppSidebar({ ...props }: React.Com
   const { permissions } = useOrgPermissions();
 
   const navItems = React.useMemo(() => {
-    const items: { title: string; url: string; icon: React.ElementType; isActive?: boolean }[] = [
+    const items: { title: string; url: string; icon: LucideIcon; isActive?: boolean }[] = [
       { title: "Dashboard", url: "/dashboard", icon: LayoutDashboardIcon, isActive: true },
       { title: "Agents", url: "/Agents", icon: Contact },
     ];
